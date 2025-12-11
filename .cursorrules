@@ -1,0 +1,13 @@
+# package manager instructions
+
+Always use `bun` instead of `npm` for all package management commands:
+
+For every changes, run `bun ts:check yourfile.ts` to check if everything is working without error. Specify only files you are working on.
+
+# shadcn instructions
+
+Use the latest version of Shadcn to install new components, like this command to add a button component:
+
+```bash
+bunx shadcn@latest add button
+```
