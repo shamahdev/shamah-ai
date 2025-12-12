@@ -1,6 +1,8 @@
 import { TanStackDevtools } from "@tanstack/react-devtools";
 import { createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 import { TanStackRouterDevtoolsPanel } from "@tanstack/react-router-devtools";
+import { AppSidebar } from "@/components/app-sidebar";
+import { Providers } from "@/components/providers";
 import appCss from "../styles.css?url";
 
 export const Route = createRootRoute({
@@ -39,7 +41,12 @@ function RootDocument({ children }: { children: React.ReactNode }) {
         <HeadContent />
       </head>
       <body className="dark">
-        {children}
+        <main className="flex items-center justify-center">
+          <Providers>
+            <AppSidebar />
+            {children}
+          </Providers>
+        </main>
         <TanStackDevtools
           config={{
             position: "bottom-right",
