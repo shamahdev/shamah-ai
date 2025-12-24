@@ -1,8 +1,9 @@
 # package manager instructions
 
 Always use `bun` instead of `npm` for all package management commands:
-
-For every changes, run `bun ts:check yourfile.ts` to check if everything is working without error. Specify only files you are working on.
+For every changes, run the following scripts:
+1. `bun ts:check yourfile.ts` to check if everything is working without error. Specify only files you are working on.
+2. `bun lint`
 
 # shadcn instructions
 

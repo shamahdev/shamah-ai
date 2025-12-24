@@ -1,20 +1,16 @@
 import { Loader } from "lucide-react";
 import { ChatPromptInput } from "@/components/chat-prompt-input";
-import { useChatMessages } from "@/hooks/use-chat-messages";
+import { useMessage } from "@/hooks/use-message";
 import {
   Conversation,
   ConversationContent,
   ConversationEmptyState,
   ConversationScrollButton,
 } from "./ai-elements/conversation";
-import type { PromptInputMessage } from "./ai-elements/prompt-input";
 import { ChatMessageList } from "./chat-message-list";
 
 export function ChatContainer() {
-  const { messages, sendMessage, regenerate, status } = useChatMessages();
-  const handleSendMessage = (message: PromptInputMessage) => {
-    sendMessage(message);
-  };
+  const { messages, sendMessage, regenerate, status } = useMessage();
 
   return (
     <div className="flex h-full w-full flex-col gap-2">
@@ -33,7 +29,7 @@ export function ChatContainer() {
         </ConversationContent>
         <ConversationScrollButton />
       </Conversation>
-      <ChatPromptInput onSubmit={handleSendMessage} />
+      <ChatPromptInput onSubmit={sendMessage} />
     </div>
   );
 }

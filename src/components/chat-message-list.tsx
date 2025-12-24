@@ -1,6 +1,5 @@
+import type { ChatStatus, UIMessage } from "ai";
 import { CopyIcon, RefreshCcwIcon } from "lucide-react";
-import type { UIMessage } from "ai";
-import type { ChatStatus } from "@ai-sdk/react";
 import {
   Message,
   MessageAction,
@@ -36,14 +35,13 @@ export function ChatMessageList({
       {messages.map((message) => (
         <div key={message.id}>
           {message.role === "assistant" &&
-            message.parts.filter((part) => part.type === "source-url")
-              .length > 0 && (
+            message.parts.filter((part) => part.type === "source-url").length >
+              0 && (
               <Sources>
                 <SourcesTrigger
                   count={
-                    message.parts.filter(
-                      (part) => part.type === "source-url",
-                    ).length
+                    message.parts.filter((part) => part.type === "source-url")
+                      .length
                   }
                 />
                 {message.parts
@@ -70,10 +68,7 @@ export function ChatMessageList({
                     {message.role === "assistant" &&
                       i === messages.length - 1 && (
                         <MessageActions>
-                          <MessageAction
-                            onClick={onRegenerate}
-                            label="Retry"
-                          >
+                          <MessageAction onClick={onRegenerate} label="Retry">
                             <RefreshCcwIcon className="size-3" />
                           </MessageAction>
                           <MessageAction
@@ -112,4 +107,3 @@ export function ChatMessageList({
     </>
   );
 }
-

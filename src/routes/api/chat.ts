@@ -38,11 +38,9 @@ export async function POST(request: Request) {
           reasoningEffort: "low",
         },
       },
-      tools: {
-        browser_search: groq.tools.browserSearch({}),
-      },
+      tools: { browser_search: groq.tools.browserSearch({}) as any },
       toolChoice: "auto",
-      messages: convertToModelMessages(messages),
+      messages: await convertToModelMessages(messages),
     });
 
     return result.toUIMessageStreamResponse();
