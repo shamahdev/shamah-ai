@@ -1,4 +1,5 @@
-import { useRef, useState } from "react";
+import type { ChatStatus } from "ai";
+import { useRef } from "react";
 import {
   PromptInput,
   PromptInputBody,
@@ -11,17 +12,17 @@ import {
   PromptInputTools,
 } from "@/components/ai-elements/prompt-input";
 
-const SUBMITTING_TIMEOUT = 200;
-const STREAMING_TIMEOUT = 2000;
-
 type ChatPromptInputProps = {
   onSubmit: (message: PromptInputMessage) => void;
+  className?: string;
+  status?: ChatStatus;
 };
 
-export function ChatPromptInput({ onSubmit }: ChatPromptInputProps) {
-  const [status, setStatus] = useState<
-    "submitted" | "streaming" | "ready" | "error"
-  >("ready");
+export function ChatPromptInput({
+  onSubmit,
+  className,
+  status,
+}: ChatPromptInputProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const handleSubmit = (message: PromptInputMessage) => {
@@ -32,21 +33,14 @@ export function ChatPromptInput({ onSubmit }: ChatPromptInputProps) {
       return;
     }
 
-    setStatus("submitted");
     onSubmit(message);
-
-    setTimeout(() => {
-      setStatus("streaming");
-    }, SUBMITTING_TIMEOUT);
-
-    setTimeout(() => {
-      setStatus("ready");
-    }, STREAMING_TIMEOUT);
   };
+
+  const isDisabled = status === "submitted" || status === "streaming";
 
   return (
     <PromptInputProvider>
-      <PromptInput multiple onSubmit={handleSubmit}>
+      <PromptInput multiple onSubmit={handleSubmit} className={className}>
         {/* <PromptInputAttachments>
           {(attachment) => <PromptInputAttachment data={attachment} />}
         </PromptInputAttachments> */}
@@ -63,7 +57,7 @@ export function ChatPromptInput({ onSubmit }: ChatPromptInputProps) {
             </PromptInputActionMenu> */}
             <PromptInputSpeechButton textareaRef={textareaRef} />
           </PromptInputTools>
-          <PromptInputSubmit status={status} />
+          <PromptInputSubmit status={status} disabled={isDisabled} />
         </PromptInputFooter>
       </PromptInput>
     </PromptInputProvider>

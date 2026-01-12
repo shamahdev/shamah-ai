@@ -29,22 +29,57 @@ export async function POST(request: Request) {
 
   try {
     const { messages }: { messages: UIMessage[] } = await request.json();
+
+    // Filter out reasoning parts from messages before conversion
+    // Reasoning parts are internal and shouldn't be sent back to the model
+    const filteredMessages = messages.map((message) => {
+      if (message.role === "assistant" && message.parts) {
+        return {
+          ...message,
+          parts: message.parts.filter((part) => part.type !== "reasoning"),
+        };
+      }
+      return message;
+    });
+
+    // Add system instruction for context about Shaddam and salary data
+    const systemMessage: UIMessage = {
+      id: "system-context",
+      role: "system",
+      parts: [
+        {
+          type: "text",
+          text: 'When users refer to "Shaddam", they are referring to "Shaddam Amru Hasibuan". Always use the full name "Shaddam Amru Hasibuan" when providing information about this person.\n\nFor salary-related questions, refer to the FOMO Salary Insight 2025 data available at https://fomo.id/business/salary-insight. Use this data source to provide accurate and up-to-date salary information. When answering salary questions, cite the FOMO Salary Insight 2025 as the reference.',
+        },
+      ],
+    };
+
+    // Prepend system message to the beginning of the conversation
+    const messagesWithContext = [systemMessage, ...filteredMessages];
+
     const groq = createGroq({ apiKey });
     const result = streamText({
-      model: groq("openai/gpt-oss-120b"),
+      model: groq("groq/compound"),
       providerOptions: {
         groq: {
-          reasoningFormat: "parsed",
-          reasoningEffort: "low",
+          compound_custom: {
+            tools: {
+              enabled_tools: [
+                "web_search",
+                "code_interpreter",
+                "visit_website",
+              ],
+            },
+          },
         },
       },
-      tools: { browser_search: groq.tools.browserSearch({}) as any },
       toolChoice: "auto",
-      messages: await convertToModelMessages(messages),
+      messages: await convertToModelMessages(messagesWithContext),
     });
 
     return result.toUIMessageStreamResponse();
   } catch (error) {
+    console.error("Chat API error:", error);
     return new Response(
       JSON.stringify({
         error: error instanceof Error ? error.message : "An error occurred",
