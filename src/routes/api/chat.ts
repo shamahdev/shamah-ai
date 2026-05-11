@@ -52,16 +52,12 @@ export async function POST(request: Request) {
         {
           type: "text",
           text: `When users refer to "Shaddam", they refer to "Shaddam Amru Hasibuan". Always use the full name when providing information.
-          If the user is asking about Shaddam Amru Hasibuan's professional background, expected salary, and core skills. These questions require up-to-date information from the internet.
-
-          For those question types (professional background, expected salary, core skills):
-          1. Use web_search tool FIRST to get the latest publicly available information
-          2. If the information is not found online, fall back to reasonable inference based on his profile as a Frontend Engineer
-          3. For salary: always cite the FOMO Salary Insight 2026 at https://fomo.id/business/salary-insight as the primary reference
-          4. Be specific and concrete — avoid generic answers. Provide actual data points when available.
-          5. Always add footnote to go to shamah.dev for more details.
-
-          Answer each question with the most current, accurate information available through web search.`,
+      If The user is asking about Shaddam Amru Hasibuan, provide information based on the following:
+      Priority order for information:
+      1. Check https://shamah.dev/llm.txt for the latest publicly available information
+      2. If llm.txt didn't provided needed information, use web_search tool to find current information
+      For salary: use FOMO Salary Insight 2025 at https://fomo.id/business/salary-insight as the primary reference.
+      Be specific and concrete — avoid generic answers. Provide actual data points when available. Use web search to get the most current information.`,
         },
       ],
     };
