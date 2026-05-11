@@ -80,9 +80,7 @@ function ChatWelcome({ onTemplateClick }: ChatWelcomeProps) {
         <h1 className="font-semibold text-2xl tracking-tight">
           How can I help you today?
         </h1>
-        <p className="text-muted-foreground text-sm">
-          Ask me anything — I&apos;m here to help
-        </p>
+        <p className="text-muted-foreground text-sm">Find more about me:</p>
       </div>
       <div className="flex flex-wrap items-center justify-center gap-2">
         {templates.map((template) => (

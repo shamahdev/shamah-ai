@@ -59,29 +59,17 @@ function InputGroupAddon({
   align = "inline-start",
   ...props
 }: React.ComponentProps<"div"> & VariantProps<typeof inputGroupAddonVariants>) {
-  const handleFocusInput = (
-    e: React.MouseEvent<HTMLDivElement> | React.KeyboardEvent<HTMLDivElement>,
-  ) => {
-    if ((e.target as HTMLElement).closest("button")) {
-      return;
-    }
-    e.currentTarget.parentElement?.querySelector("input")?.focus();
-  };
-
   return (
     <div
-      // biome-ignore lint/a11y/noNoninteractiveTabindex: Required for keyboard accessibility to focus input
-      tabIndex={0}
       role="group"
       data-slot="input-group-addon"
       data-align={align}
       className={cn(inputGroupAddonVariants({ align }), className)}
-      onClick={handleFocusInput}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          handleFocusInput(e);
+      onClick={(e) => {
+        if ((e.target as HTMLElement).closest("button")) {
+          return;
         }
+        e.currentTarget.parentElement?.querySelector("input")?.focus();
       }}
       {...props}
     />
@@ -173,7 +161,7 @@ export {
   InputGroup,
   InputGroupAddon,
   InputGroupButton,
-  InputGroupText,
   InputGroupInput,
+  InputGroupText,
   InputGroupTextarea,
 };

@@ -1,12 +1,11 @@
 import type { ChatStatus } from "ai";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import {
   PromptInput,
   PromptInputBody,
   PromptInputFooter,
   type PromptInputMessage,
   PromptInputProvider,
-  PromptInputSpeechButton,
   PromptInputSubmit,
   PromptInputTextarea,
   PromptInputTools,
@@ -38,28 +37,29 @@ export function ChatPromptInput({
 
   const isDisabled = status === "submitted" || status === "streaming";
 
+  useEffect(() => {
+    if (status === "streaming") {
+      window.onbeforeunload = () =>
+        "You have an active chat session. Are you sure you want to leave?";
+    } else {
+      window.onbeforeunload = null;
+    }
+  }, [status]);
+
   return (
     <PromptInputProvider>
       <PromptInput multiple onSubmit={handleSubmit} className={className}>
-        {/* <PromptInputAttachments>
-          {(attachment) => <PromptInputAttachment data={attachment} />}
-        </PromptInputAttachments> */}
         <PromptInputBody>
           <PromptInputTextarea ref={textareaRef} />
         </PromptInputBody>
         <PromptInputFooter>
-          <PromptInputTools>
-            {/* <PromptInputActionMenu>
-              <PromptInputActionMenuTrigger />
-              <PromptInputActionMenuContent>
-                <PromptInputActionAddAttachments />
-              </PromptInputActionMenuContent>
-            </PromptInputActionMenu> */}
-            <PromptInputSpeechButton textareaRef={textareaRef} />
-          </PromptInputTools>
+          <PromptInputTools></PromptInputTools>
           <PromptInputSubmit status={status} disabled={isDisabled} />
         </PromptInputFooter>
       </PromptInput>
+      <p className="text-muted-foreground text-xs">
+        Your chats are saved locally.
+      </p>
     </PromptInputProvider>
   );
 }
